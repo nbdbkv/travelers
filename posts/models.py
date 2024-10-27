@@ -1,6 +1,15 @@
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 from accounts.models import CustomUser
+
+
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
+
+    class Meta:
+        abstract = True
 
 
 class Country(models.Model):
@@ -28,3 +37,23 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Post(TimeStampedModel):
+    topic = models.CharField(max_length=128, verbose_name='Тема')
+    description = models.TextField(
+        validators=[MinLengthValidator(3)], help_text='Минимальная длина 3 символа', verbose_name='Описание',
+    )
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name='user_posts', verbose_name='Пользователь',
+    )
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='country_posts', verbose_name='Страна')
+    tag = models.ManyToManyField(Tag, null=True, blank=True, related_name='tag_posts', verbose_name='Тег')
+    is_shown = models.BooleanField(default=True, verbose_name='Отображать')
+
+    class Meta:
+        verbose_name = 'пост'
+        verbose_name_plural = 'Посты'
+
+    def __str__(self):
+        return f'{self.user.email} - {self.topic}'
