@@ -1,9 +1,11 @@
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from accounts.models import CustomUser
-from accounts.serializers import UserRegisterSerializer, UserVerifySerializer
+from accounts.serializers import (
+    UserRegisterSerializer, UserVerifySerializer, ProfileSerializer, ProfileUpdateSerializer,
+)
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -21,3 +23,21 @@ class UserVerifyView(generics.GenericAPIView):
         user = serializer.update()
         tokens = user.tokens()
         return Response(tokens, status=status.HTTP_202_ACCEPTED)
+
+
+class ProfileView(generics.RetrieveAPIView):
+    queryset = CustomUser
+    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
+
+class ProfileUpdateView(generics.UpdateAPIView):
+    queryset = CustomUser
+    serializer_class = ProfileUpdateSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
