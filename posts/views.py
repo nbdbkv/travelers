@@ -16,6 +16,19 @@ class TagListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
 
+class PostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = super().get_queryset()
+        if not user.is_anonymous:
+            return queryset
+        else:
+            return queryset.order_by('-id')[:1]
+
+
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
