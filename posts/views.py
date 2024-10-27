@@ -3,10 +3,10 @@ from rest_framework import generics
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
-from posts.models import Country, Tag, Post, PostImage
+from posts.models import Country, Tag, Post, PostImage, Comment
 from posts.serializers import (
     CountrySerializer, CountryDetailSerializer, TagListCreateSerializer, PostListSerializer, PostCreateSerializer,
-    PostImageCreateSerializer,
+    PostImageCreateSerializer, CommentCreateSerializer,
 )
 
 
@@ -58,6 +58,17 @@ class PostImageCreateView(generics.CreateAPIView):
     queryset = PostImage.objects.all()
     serializer_class = PostImageCreateSerializer
     parser_classes = (FormParser, MultiPartParser)
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+
+class CommentCreateView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentCreateSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_context(self):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from posts.models import Country, Tag, Post, PostImage
+from posts.models import Country, Tag, Post, PostImage, Comment
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -87,3 +87,10 @@ class PostImageCreateSerializer(serializers.ModelSerializer):
                 {'message': 'У вас нет разрешения на создание поста.'}
             )
         return attrs
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ('post', 'text')
