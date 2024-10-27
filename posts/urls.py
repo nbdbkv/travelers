@@ -1,5 +1,7 @@
 from django.urls import path
 
-urlpatterns = [
+from posts.views import CountryListCreateView
 
+urlpatterns = [
+    path('country/', CountryListCreateView.as_view()),
 ]
