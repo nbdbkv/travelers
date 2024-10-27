@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from posts.models import Country, Tag
+from posts.models import Country, Tag, Post
 
 
 @admin.register(Country)
@@ -14,3 +14,9 @@ class CountryAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('topic', 'user', 'country', 'is_shown')
+    list_display_links = list_display
