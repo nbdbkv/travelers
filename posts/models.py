@@ -57,3 +57,15 @@ class Post(TimeStampedModel):
 
     def __str__(self):
         return f'{self.user.email} - {self.topic}'
+
+
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_images', verbose_name='Пост')
+    image = models.ImageField(upload_to='post/image', null=True, blank=True, verbose_name='Фото')
+
+    class Meta:
+        verbose_name = 'фото поста'
+        verbose_name_plural = 'Фото поста'
+
+    def __str__(self):
+        return self.image.name
