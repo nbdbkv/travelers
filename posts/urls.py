@@ -1,9 +1,10 @@
 from django.urls import path
 
-from posts.views import CountryListCreateView, TagListCreateView, PostListView, PostCreateView
+from posts.views import CountryListView, CountryCreateView, TagListCreateView, PostListView, PostCreateView
 
 urlpatterns = [
-    path('country/', CountryListCreateView.as_view()),
+    path('country/', CountryListView.as_view()),
+    path('country/create/', CountryCreateView.as_view()),
 
     path('tag/', TagListCreateView.as_view()),
 

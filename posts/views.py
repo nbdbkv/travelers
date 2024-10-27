@@ -1,13 +1,23 @@
+from django.db.models import Count
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from posts.models import Country, Tag, Post
-from posts.serializers import CountryListCreateSerializer, TagListCreateSerializer, PostSerializer
+from posts.serializers import CountrySerializer, TagListCreateSerializer, PostSerializer
 
 
-class CountryListCreateView(generics.ListCreateAPIView):
+class CountryListView(generics.ListAPIView):
     queryset = Country.objects.all()
-    serializer_class = CountryListCreateSerializer
+    serializer_class = CountrySerializer
+
+    def get_queryset(self):
+        queryset = Country.objects.annotate(post_count=Count('country_posts')).filter(post_count__gt=0)
+        return queryset
+
+
+class CountryCreateView(generics.CreateAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
 
 
 class TagListCreateView(generics.ListCreateAPIView):

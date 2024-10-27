@@ -3,7 +3,7 @@ from rest_framework import serializers
 from posts.models import Country, Tag, Post
 
 
-class CountryListCreateSerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
