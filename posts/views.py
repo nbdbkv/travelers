@@ -36,7 +36,7 @@ class TagListCreateView(generics.ListCreateAPIView):
 
 
 class PostListView(generics.ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(is_shown=True)
     serializer_class = PostListSerializer
 
     def get_queryset(self):
@@ -45,7 +45,7 @@ class PostListView(generics.ListAPIView):
         if not user.is_anonymous:
             return queryset
         else:
-            return queryset.order_by('-id')[:1]
+            return queryset.order_by('-id')[:10]
 
 
 class PostCreateView(generics.CreateAPIView):
