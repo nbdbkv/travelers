@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from posts.models import Country, Tag, PostImage, Post
+from posts.models import Country, Tag, PostImage, Comment, Post
 
 
 @admin.register(Country)
@@ -21,8 +21,13 @@ class PostImageInline(admin.TabularInline):
     extra = 0
 
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+    extra = 0
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('topic', 'user', 'country', 'is_shown')
     list_display_links = list_display
-    inlines = (PostImageInline,)
+    inlines = (PostImageInline, CommentInline)
