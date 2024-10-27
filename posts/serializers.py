@@ -44,6 +44,13 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'topic', 'description', 'user', 'country', 'tag')
 
+    def validate_user(self, value):
+        if not value.can_post:
+            raise serializers.ValidationError(
+                {'message': 'У вас нет разрешения на создание поста.'}
+            )
+        return value
+
 
 class PostDetailSerializer(serializers.ModelSerializer):
     tag = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
@@ -67,10 +74,16 @@ class PostImageCreateSerializer(serializers.ModelSerializer):
         model = PostImage
         fields = ('post', 'image')
 
-    def validate_post(self, value):
-        images = PostImage.objects.filter(post=value)
+    def validate(self, attrs):
+        post=attrs.get('post')
+        images = PostImage.objects.filter(post=post)
         if len(images) == 10:
             raise serializers.ValidationError(
                 {'message': 'Вы можете загрузить максимум 10 фотографий.'}
             )
-        return value
+        user = self.context['request'].user
+        if not user.can_post:
+            raise serializers.ValidationError(
+                {'message': 'У вас нет разрешения на создание поста.'}
+            )
+        return attrs
