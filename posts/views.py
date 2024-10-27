@@ -1,9 +1,13 @@
 from django.db.models import Count
 from rest_framework import generics
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 
-from posts.models import Country, Tag, Post
-from posts.serializers import CountrySerializer, CountryDetailSerializer, TagListCreateSerializer, PostSerializer
+from posts.models import Country, Tag, Post, PostImage
+from posts.serializers import (
+    CountrySerializer, CountryDetailSerializer, TagListCreateSerializer, PostListSerializer, PostCreateSerializer,
+    PostImageCreateSerializer,
+)
 
 
 class CountryListView(generics.ListAPIView):
@@ -33,7 +37,7 @@ class TagListCreateView(generics.ListCreateAPIView):
 
 class PostListView(generics.ListAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = PostListSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -46,5 +50,12 @@ class PostListView(generics.ListAPIView):
 
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = PostCreateSerializer
+    permission_classes = (IsAuthenticated,)
+
+
+class PostImageCreateView(generics.CreateAPIView):
+    queryset = PostImage.objects.all()
+    serializer_class = PostImageCreateSerializer
+    parser_classes = (FormParser, MultiPartParser)
     permission_classes = (IsAuthenticated,)
