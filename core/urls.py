@@ -8,6 +8,7 @@ from core.yasg import urlpatterns as yasg
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('accounts.urls')),
+    path('post/', include('posts.urls')),
 ] + yasg
 
 
