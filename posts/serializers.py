@@ -52,7 +52,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
         return value
 
 
-class PostDetailSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     tag = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
 
     class Meta:
@@ -61,7 +61,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 
 class CountryDetailSerializer(serializers.ModelSerializer):
-    posts = PostDetailSerializer(source='country_posts', many=True, read_only=True)
+    posts = PostSerializer(source='country_posts', many=True, read_only=True)
 
     class Meta:
         model = Country
@@ -94,3 +94,14 @@ class CommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('post', 'text')
+
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    country = CountrySerializer(read_only=True)
+    tag = TagListCreateSerializer(read_only=True, many=True)
+    post_images = PostImageSerializer(many=True, read_only=True)
+    comments = CommentCreateSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ('id', 'topic', 'description', 'country', 'tag', 'post_images', 'comments')

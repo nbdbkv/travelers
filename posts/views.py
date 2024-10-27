@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from posts.models import Country, Tag, Post, PostImage, Comment
 from posts.serializers import (
-    CountrySerializer, CountryDetailSerializer, TagListCreateSerializer, PostListSerializer, PostCreateSerializer,
-    PostImageCreateSerializer, CommentCreateSerializer,
+    CountrySerializer, CountryDetailSerializer, TagListCreateSerializer, PostListSerializer, PostDetailSerializer,
+    PostCreateSerializer, PostImageCreateSerializer, CommentCreateSerializer,
 )
 
 
@@ -46,6 +46,11 @@ class PostListView(generics.ListAPIView):
             return queryset
         else:
             return queryset.order_by('-id')[:10]
+
+
+class PostDetailView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostDetailSerializer
 
 
 class PostCreateView(generics.CreateAPIView):
