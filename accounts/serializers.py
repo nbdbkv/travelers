@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from accounts.choices import OTPType
 from accounts.models import CustomUser
@@ -77,3 +78,8 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
+
+
+class TokenAccessSerializer(TokenObtainPairSerializer):
+
+    default_error_messages = {'no_active_account': 'Неверная электронная почта или пароль.'}

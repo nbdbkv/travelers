@@ -1,10 +1,11 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from accounts.models import CustomUser
 from accounts.serializers import (
-    UserRegisterSerializer, UserVerifySerializer, ProfileSerializer, ProfileUpdateSerializer,
+    UserRegisterSerializer, UserVerifySerializer, ProfileSerializer, ProfileUpdateSerializer, TokenAccessSerializer,
 )
 
 
@@ -41,3 +42,7 @@ class ProfileUpdateView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class TokenAccessView(TokenObtainPairView):
+    serializer_class = TokenAccessSerializer
