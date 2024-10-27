@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from posts.models import Country, Tag, Post
-from posts.serializers import CountrySerializer, TagListCreateSerializer, PostSerializer
+from posts.serializers import CountrySerializer, CountryDetailSerializer, TagListCreateSerializer, PostSerializer
 
 
 class CountryListView(generics.ListAPIView):
@@ -18,6 +18,11 @@ class CountryListView(generics.ListAPIView):
 class CountryCreateView(generics.CreateAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+
+
+class CountryDetailView(generics.RetrieveAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountryDetailSerializer
 
 
 class TagListCreateView(generics.ListCreateAPIView):

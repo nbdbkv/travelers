@@ -25,3 +25,19 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'topic', 'description', 'user', 'country', 'tag')
+
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    tag = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+
+    class Meta:
+        model = Post
+        fields = ('id', 'topic', 'description', 'tag')
+
+
+class CountryDetailSerializer(serializers.ModelSerializer):
+    posts = PostSerializer(source='country_posts', many=True, read_only=True)
+
+    class Meta:
+        model = Country
+        fields = ('id', 'name', 'alpha2Code', 'alpha3Code', 'capital', 'region', 'posts')
