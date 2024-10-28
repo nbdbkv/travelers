@@ -6,8 +6,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from accounts.models import CustomUser
 from accounts.serializers import (
-    UserListSerializer, UserRegisterSerializer, UserVerifySerializer, ProfileSerializer, ProfileUpdateSerializer,
-    TokenAccessSerializer,
+    UserListSerializer, UserDetailSerializer, UserRegisterSerializer, UserVerifySerializer, ProfileSerializer,
+    ProfileUpdateSerializer, TokenAccessSerializer,
 )
 
 
@@ -22,6 +22,11 @@ class UserListView(generics.ListAPIView):
             country_count=Count('user_posts__country', distinct=True)
         )
         return queryset
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserDetailSerializer
 
 
 class UserRegisterView(generics.CreateAPIView):

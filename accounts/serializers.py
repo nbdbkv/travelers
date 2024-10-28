@@ -8,6 +8,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.choices import OTPType
 from accounts.models import CustomUser
 from accounts.services import send_otp_to_email
+from posts.serializers import PostSerializer
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -23,6 +24,14 @@ class UserListSerializer(serializers.ModelSerializer):
 
     def get_country_count(self, obj):
         return getattr(obj, 'country_count', 0)
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    user_posts = PostSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'first_name', 'last_name', 'user_posts')
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
