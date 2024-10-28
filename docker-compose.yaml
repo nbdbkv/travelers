@@ -33,7 +33,7 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    command: redis-server --appendonly yes --replica-read-only no
+    command: redis-server --appendonly yes --replica-read-only no --bind 0.0.0.0
 
 volumes:
   postgres_data:
