@@ -27,14 +27,15 @@
 
 1. **Клонируйте репозиторий:**
    ```bash
-   git clone https://github.com/ваш-юзернейм/название-репозитория.git
-   cd название-репозитория
+   git clone git@github.com:nbdbkv/travelers.git
+   cd travelers
    ```
 
 2. **Настройте переменные окружения:**
    ```bash
    cp .env.example .env
    ```
+
 ## Настройка Docker
 
 ### Сборка и запуск в Docker
