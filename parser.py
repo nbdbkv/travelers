@@ -20,7 +20,7 @@ def get_countries():
             'capital': country['capital'],
             'region': country['region']
         }
-        response = requests.post('http://127.0.0.1:8000/post/country/', json=payload)
+        response = requests.post('http://127.0.0.1:8000/post/country/create/', json=payload)
 
         if response.status_code != 201:
             print(f'Error: {response.status_code} {country}')
