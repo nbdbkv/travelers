@@ -90,10 +90,16 @@ class PostImageCreateSerializer(serializers.ModelSerializer):
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
+    replies = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ('post', 'text')
+        fields = ('id', 'post', 'text', 'parent', 'replies')
+
+    def get_replies(self, obj):
+        if obj.replies.exists():
+            return CommentCreateSerializer(obj.replies.all(), many=True).data
+        return []
 
 
 class PostDetailSerializer(serializers.ModelSerializer):

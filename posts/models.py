@@ -73,6 +73,10 @@ class PostImage(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments', verbose_name='Пост')
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True,
+        verbose_name='Родительский комментарий',
+    )
     text = models.TextField(verbose_name='Текст')
 
     class Meta:
