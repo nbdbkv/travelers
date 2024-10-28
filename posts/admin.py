@@ -26,6 +26,17 @@ class CommentInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('post', 'parent', 'text')
+    list_display_links = list_display
+    inlines = (CommentInline,)
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.select_related('post', 'parent')
+
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('topic', 'user', 'country', 'is_shown')
