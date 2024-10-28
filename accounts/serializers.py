@@ -10,6 +10,21 @@ from accounts.models import CustomUser
 from accounts.services import send_otp_to_email
 
 
+class UserListSerializer(serializers.ModelSerializer):
+    post_count = serializers.SerializerMethodField()
+    country_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'first_name', 'post_count', 'country_count')
+
+    def get_post_count(self, obj):
+        return getattr(obj, 'post_count', 0)
+
+    def get_country_count(self, obj):
+        return getattr(obj, 'country_count', 0)
+
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     otp_type = serializers.IntegerField(write_only=True, required=True)
 

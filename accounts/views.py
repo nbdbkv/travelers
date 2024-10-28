@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -5,8 +6,22 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from accounts.models import CustomUser
 from accounts.serializers import (
-    UserRegisterSerializer, UserVerifySerializer, ProfileSerializer, ProfileUpdateSerializer, TokenAccessSerializer,
+    UserListSerializer, UserRegisterSerializer, UserVerifySerializer, ProfileSerializer, ProfileUpdateSerializer,
+    TokenAccessSerializer,
 )
+
+
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        queryset = CustomUser.objects.annotate(
+            post_count=Count('user_posts'),
+            country_count=Count('user_posts__country', distinct=True)
+        )
+        return queryset
 
 
 class UserRegisterView(generics.CreateAPIView):
